@@ -1,28 +1,9 @@
 {
-  "id": "mattermost-profanity-filter",
-  "name": "Profanity Filter",
-  "description": "For filtering out naughty words.",
+  "id": "mattermost-inline-latex-filter",
+  "name": "Inline LaTeX Plugin",
+  "description": "Converts $ notations to `$...$`",
   "version": "0.1.0",
   "backend": {
     "executable": "server/plugin.exe"
   },
-  "settings_schema": {
-    "settings": [
-      {
-        "key": "RejectPosts",
-        "display_name": "Reject Posts",
-        "type": "bool",
-        "help_text": "If set the plugin will reject posts containing profanity instead of censoring."
-      },
-      {
-        "key": "CensorCharacter",
-        "display_name": "Censor Character",
-        "type": "text",
-        "help_text": "The character(s) to use to censor profanity. Censored words' letters will be replaced with this character. Note that markdown will be interpreted. You can escape markdown character with a backslash. For using * you type \\*.",
-        "placeholder": "Ex. \\*",
-        "default": "\\*"
-      }
-    ],
-    "footer": ""
-  }
 }

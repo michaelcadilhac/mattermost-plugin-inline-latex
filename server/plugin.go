@@ -3,6 +3,7 @@ package main
 import (
 	"net/http"
 	"strings"
+	"regexp"
 
 	"github.com/mattermost/mattermost-server/model"
 	"github.com/mattermost/mattermost-server/plugin"
@@ -10,10 +11,6 @@ import (
 
 type Plugin struct {
 	plugin.MattermostPlugin
-	badWords map[string]bool
-
-	RejectPosts     bool
-	CensorCharacter string
 }
 
 func main() {
@@ -21,11 +18,6 @@ func main() {
 }
 
 func (p *Plugin) OnActivate() error {
-	p.badWords = make(map[string]bool, len(badWords))
-	for _, word := range badWords {
-		p.badWords[word] = true
-	}
-
 	return nil
 }
 
@@ -36,24 +28,19 @@ func (p *Plugin) ServeHTTP(c *plugin.Context, w http.ResponseWriter, r *http.Req
 	}
 }
 
-func (p *Plugin) WordIsBad(word string) bool {
-	_, ok := p.badWords[word]
-	return ok
+func (p *Plugin) ReplaceMatch(match string) (string) {
+	if match == "\\$" {
+		return "$"
+	}
+	if strings.HasPrefix(match, "$$") {
+		return "\n```latex\n" + match[2:len(match)-2] + "```\n"
+	}
+	return "`latex" + match[1:len(match)-1] + "`"
 }
 
 func (p *Plugin) FilterPost(post *model.Post) (*model.Post, string) {
-	message := post.Message
-	words := strings.Split(message, " ")
-	for i, word := range words {
-		if p.WordIsBad(word) {
-			if p.RejectPosts {
-				return nil, "Profane word not allowed: " + word
-			}
-			words[i] = strings.Repeat(p.CensorCharacter, len(word))
-		}
-	}
-
-	post.Message = strings.Join(words, " ")
+	re := regexp.MustCompile(`\(\\\$\|\$\$([\s\S]*?[^\\](\\\\)*)\$\$\|\$([\s\S]*?[^\\](\\\\)*)\$\)`)
+	post.Message = re.ReplaceAllStringFunc(post.Message, p.ReplaceMatch)
 	return post, ""
 }
 

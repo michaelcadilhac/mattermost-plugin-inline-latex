@@ -42,32 +42,32 @@ dist: plugin.json
 	cd server && go get github.com/mitchellh/gox
 	$(shell go env GOPATH)/bin/gox -osarch='darwin/amd64 linux/amd64 windows/amd64' -output 'dist/intermediate/plugin_{{.OS}}_{{.Arch}}' ./server
 
-	mkdir -p dist/profanity-filter/
+	mkdir -p dist/inline-latex/
 
 	# Copy plugin files
-	cp plugin.json dist/profanity-filter/
+	cp plugin.json dist/inline-latex/
 
 	# Copy server executables & compress plugin
-	mkdir -p dist/profanity-filter/server
-	mv dist/intermediate/plugin_linux_amd64 dist/profanity-filter/server/plugin.exe
-	cd dist && tar -zcvf mattermost-profanity-filter-plugin-linux-amd64.tar.gz profanity-filter/*
-	mv dist/intermediate/plugin_windows_amd64.exe dist/profanity-filter/server/plugin.exe
-	cd dist && tar -zcvf mattermost-profanity-filter-plugin-windows-amd64.tar.gz profanity-filter/*
-	mv dist/intermediate/plugin_darwin_amd64 dist/profanity-filter/server/plugin.exe
-	cd dist && tar -zcvf mattermost-profanity-filter-plugin-darwin-amd64.tar.gz profanity-filter/*
+	mkdir -p dist/inline-latex/server
+	mv dist/intermediate/plugin_linux_amd64 dist/inline-latex/server/plugin.exe
+	cd dist && tar -zcvf mattermost-inline-latex-plugin-linux-amd64.tar.gz inline-latex/*
+	mv dist/intermediate/plugin_windows_amd64.exe dist/inline-latex/server/plugin.exe
+	cd dist && tar -zcvf mattermost-inline-latex-plugin-windows-amd64.tar.gz inline-latex/*
+	mv dist/intermediate/plugin_darwin_amd64 dist/inline-latex/server/plugin.exe
+	cd dist && tar -zcvf mattermost-inline-latex-plugin-darwin-amd64.tar.gz inline-latex/*
 
 	# Clean up temp files
-	rm -rf dist/profanity-filter
+	rm -rf dist/inline-latex
 	rm -rf dist/intermediate
 
-	@echo Linux plugin built at: dist/mattermost-profanity-filter-plugin-linux-amd64.tar.gz
-	@echo MacOS X plugin built at: dist/mattermost-profanity-filter-plugin-darwin-amd64.tar.gz
-	@echo Windows plugin built at: dist/mattermost-profanity-filter-plugin-windows-amd64.tar.gz
+	@echo Linux plugin built at: dist/mattermost-inline-latex-plugin-linux-amd64.tar.gz
+	@echo MacOS X plugin built at: dist/mattermost-inline-latex-plugin-darwin-amd64.tar.gz
+	@echo Windows plugin built at: dist/mattermost-inline-latex-plugin-windows-amd64.tar.gz
 
 localdeploy: dist
-	cp dist/mattermost-profanity-filter-plugin-$(GOOS)-$(GOARCH).tar.gz ../mattermost-server/plugins/
-	rm -rf ../mattermost-server/plugins/profanity-filter
-	tar -C ../mattermost-server/plugins/ -zxvf ../mattermost-server/plugins/mattermost-profanity-filter-plugin-$(GOOS)-$(GOARCH).tar.gz
+	cp dist/mattermost-inline-latex-plugin-$(GOOS)-$(GOARCH).tar.gz ../mattermost-server/plugins/
+	rm -rf ../mattermost-server/plugins/inline-latex
+	tar -C ../mattermost-server/plugins/ -zxvf ../mattermost-server/plugins/mattermost-inline-latex-plugin-$(GOOS)-$(GOARCH).tar.gz
 
 stop:
 	@echo Not yet implemented
