@@ -1,7 +1,7 @@
 {
   "id": "mattermost-inline-latex-filter",
   "name": "Inline LaTeX Plugin",
-  "description": "Converts $ notations to `$...$`",
+  "description": "Renders inline LaTeX notations (with $ and $$) with KaTeX",
   "version": "0.1.0",
   "backend": {
     "executable": "server/plugin.exe"
