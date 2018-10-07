@@ -33,9 +33,9 @@ func (p *Plugin) ReplaceMatch(match string) string {
 		return "$"
 	}
 	if strings.HasPrefix(match, "$$") {
-		return "\n```latex\n" + match[2:len(match)-2] + "```\n"
+		return "\n```latex\n" + match[2:len(match)-2] + "\n```\n"
 	}
-	return "`latex" + match[1:len(match)-1] + "`"
+	return "`latex " + match[1:len(match)-1] + "`"
 }
 
 func (p *Plugin) FilterPost(post *model.Post) (*model.Post, string) {
