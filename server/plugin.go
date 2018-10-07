@@ -2,8 +2,8 @@ package main
 
 import (
 	"net/http"
-	"strings"
 	"regexp"
+	"strings"
 
 	"github.com/mattermost/mattermost-server/model"
 	"github.com/mattermost/mattermost-server/plugin"
@@ -28,7 +28,7 @@ func (p *Plugin) ServeHTTP(c *plugin.Context, w http.ResponseWriter, r *http.Req
 	}
 }
 
-func (p *Plugin) ReplaceMatch(match string) (string) {
+func (p *Plugin) ReplaceMatch(match string) string {
 	if match == "\\$" {
 		return "$"
 	}
@@ -39,7 +39,7 @@ func (p *Plugin) ReplaceMatch(match string) (string) {
 }
 
 func (p *Plugin) FilterPost(post *model.Post) (*model.Post, string) {
-	re := regexp.MustCompile(`\(\\\$\|\$\$([\s\S]*?[^\\](\\\\)*)\$\$\|\$([\s\S]*?[^\\](\\\\)*)\$\)`)
+	re := regexp.MustCompile(`(\\\$|\$\$([\s\S]*?[^\\](\\\\)*)\$\$|\$([\s\S]*?[^\\](\\\\)*)\$)`)
 	post.Message = re.ReplaceAllStringFunc(post.Message, p.ReplaceMatch)
 	return post, ""
 }
